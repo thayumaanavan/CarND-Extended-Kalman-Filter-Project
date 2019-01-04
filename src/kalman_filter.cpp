@@ -67,10 +67,12 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   
   // Avoid zero division
   if (fabs(rho) < 0.00001) {
-    rho_dot = 0;
-  } else {    
-    rho_dot = (px*vx + py*vy)/rho;
-  }
+    px += .001;
+    py += .001;
+    rho = sqrt(px * px + py * py);    
+  } 
+  
+  rho_dot = (px*vx + py*vy)/rho;
   
   //calculate delta
   VectorXd h = VectorXd(3);

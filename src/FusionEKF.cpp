@@ -86,6 +86,20 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       double vy = 0.0;
       ekf_.x_ << px, py, vx , vy;
     }
+    
+    // state covariance matrix P_
+    ekf_.P_ = MatrixXd(4, 4);
+    ekf_.P_ << 1, 0, 0, 0,
+               0, 1, 0, 0,
+               0, 0, 1000, 0,
+               0, 0, 0, 1000;
+    
+    // the initial transition matrix F_
+    ekf_.F_ = MatrixXd(4, 4);
+    ekf_.F_ << 1, 0, 1, 0,
+               0, 1, 0, 1,
+               0, 0, 1, 0,
+               0, 0, 0, 1;
 
     // done initializing, no need to predict or update
     previous_timestamp_ = measurement_pack.timestamp_;
